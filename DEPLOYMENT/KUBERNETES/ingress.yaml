@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: suri-global-ingress-routing
+  namespace: suri-infrastructure-remediation
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: api.suri-ecosystem.internal
+    http:
+      paths:
+      - path: /v1/inference
+        pathType: Prefix
+        backend:
+          service:
+            name: suri-vision-inference-node
+            port:
+              number: 8001
