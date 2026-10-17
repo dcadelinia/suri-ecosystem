@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  suri-vision-core:
+    image: nvcr.io/nvidia/deepstream:6.3-samples
+    container_name: suri_vision_processor
+    restart: always
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
+    volumes:
+      - ./src/vision_module:/app/suri_core
+    devices:
+      - /dev/nvidia0:/dev/nvidia0
+    runtime: nvidia # Tells the host system to pass through GPU processing power
