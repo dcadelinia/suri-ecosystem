@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: suri-vision-inference-node
+  namespace: suri-infrastructure-remediation
+  labels:
+    app.kubernetes.io/name: suri-vision
+    security.compliance: tutsa-wto-protected
+spec:
+  replicas: 5 # Scales out dynamically across nodes to accommodate high-volume telemetry surges
+  selector:
+    matchLabels:
+      app: suri-vision-engine
+  template:
+    metadata:
+      labels:
+        app: suri-vision-engine
+    spec:
+      containers:
+      - name: nvidia-triton-runtime
+        image: nvcr.io/nvidia/tritoninferenceserver:24.01-py3 # Standard NVIDIA Enterprise Image
+        args: ["tritonserver", "--model-repository=/models", "--allow-gpu-metrics=true"]
+        resources:
+          limits:
+            ://nvidia.com: "1" # Native hardware passthrough valid on AWS EKS, Azure AKS, and Google GKE
+            memory: "32Gi"
+            cpu: "8"
+          requests:
+            ://nvidia.com: "1"
+            memory: "16Gi"
+            cpu: "4"
+        ports:
+        - containerPort: 8000
+          name: http-inference
+        - containerPort: 8001
+          name: grpc-inference
+        - containerPort: 8002
+          name: metrics-telemetry
+        volumeMounts:
+        - name: telemetry-persistent-storage
+          mountPath: /logs/telemetry
+      volumes:
+      - name: telemetry-persistent-storage
+        persistentVolumeClaim:
+          claimName: suri-telemetry-pvc
