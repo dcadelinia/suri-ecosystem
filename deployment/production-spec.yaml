@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: suri-core-inference-engine
+  namespace: infrastructure-remediation
+  labels:
+    app: suri-vision
+    compliance: tutsa-wto-secured
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: suri-vision
+  template:
+    metadata:
+      labels:
+        app: suri-vision
+    spec:
+      containers:
+      - name: triton-inference-server
+        image: nvcr.io/nvidia/tritoninferenceserver:24.01-py3 # NVIDIA Enterprise Container
+        args: ["tritonserver", "--model-repository=/models"]
+        resources:
+          limits:
+            ://nvidia.com: "1" # Explicit passthrough requirement for high-frame-rate edge compute
+        ports:
+        - containerPort: 8000
+          name: http
+        - containerPort: 8001
+          name: grpc
