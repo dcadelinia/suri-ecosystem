@@ -6,8 +6,6 @@ primary_region = "iad"
 
 [env]
   PORT = "8080"
-  MANTAGU_LOG_LEVEL = "PRODUCTION"
-  DATA_DIR = "/data"
 
 [[services]]
   internal_port = 8080
@@ -24,9 +22,9 @@ primary_region = "iad"
     port = 443
 
   [[services.http_checks]]
-    interval = "10s"
-    grace_period = "5s"
+    interval = "15s"
+    grace_period = "10s"
     method = "get"
     path = "/health"
     protocol = "http"
-    timeout = "2s"
+    timeout = "3s"
