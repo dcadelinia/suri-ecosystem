@@ -1,0 +1,17 @@
+name: Fly Deploy
+on:
+  push:
+    branches: [ "main", "Modify-log-level-and-health-check-intervals" ]
+jobs:
+  deploy:
+    name: Deploy Application
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Context
+        uses: actions/checkout@v4
+      - name: Setup Fly Cloud Tooling
+        uses: superfly/flyctl-actions/setup-flyctl@master
+      - name: Execute Fleet Deployment Update
+        run: flyctl deploy --remote-only --config fly.toml --strategy rolling --ha=false
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
