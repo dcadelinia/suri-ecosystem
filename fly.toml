@@ -1,31 +1,32 @@
 app = "suri-ecosystem-app"
-primary_region = "iad" 
+primary_region = "iad"
 
 [build]
-dockerfile = "Dockerfile" 
+  dockerfile = "Dockerfile"
 
 [env]
-PORT = "8080"
-MANTAGU_LOG_LEVEL = "INFO" 
+  PORT = "8080"
+  # Bypasses missing volume crashes by mapping SQLite back to our built-in container directory
+  DATA_DIR = "/data" 
 
 [[services]]
-internal_port = 8080
-processes = ["app"]
-protocol = "tcp" 
+  internal_port = 8080
+  processes = ["app"]
+  protocol = "tcp"
 
-[[services.ports]]
-force_https = true
-handlers = ["http"]
-port = 80 
+  [[services.ports]]
+    force_https = true
+    handlers = ["http"]
+    port = 80
 
-[[services.ports]]
-handlers = ["tls", "http"]
-port = 443 
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
 
-[[services.http_checks]]
-interval = "10s"
-grace_period = "5s"
-method = "get"
-path = "/health"
-protocol = "http"
-timeout = "2s"
+  [[services.http_checks]]
+    interval = "10s"
+    grace_period = "5s"
+    method = "get"
+    path = "/health"
+    protocol = "http"
+    timeout = "2s"
