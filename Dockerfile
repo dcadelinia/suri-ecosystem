@@ -1,22 +1,23 @@
-FROM python:3.10-slim 
+FROM python:3.11-slim
 
-WORKDIR /app 
+WORKDIR /app
 
-### Ensure essential tooling configurations match platform compiler requirements
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && apt-get install -y --no-install-recommends 
-build-essential 
-&& rm -rf /var/lib/apt/lists/* 
-
-### Pre-load required package structures
-
+# Copy and install python library modules
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt 
+RUN pip install --no-cache-dir -r requirements.txt
 
-### Bundle application workspace modules directly into image path runtime layers
+# Create the internal data directory explicitly so SQLite has write-access
+RUN mkdir -p /data
 
-COPY . . 
+# Bundle project files
+COPY . .
 
-EXPOSE 8080 
+EXPOSE 8080
 
+# Execute direct module call matching your main entry script structure
 CMD ["python", "-m", "uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8080"]
