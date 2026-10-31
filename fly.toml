@@ -1,0 +1,31 @@
+app = "suri-ecosystem-app"
+primary_region = "iad" 
+
+[build]
+dockerfile = "Dockerfile" 
+
+[env]
+PORT = "8080"
+MANTAGU_LOG_LEVEL = "INFO" 
+
+[[services]]
+internal_port = 8080
+processes = ["app"]
+protocol = "tcp" 
+
+[[services.ports]]
+force_https = true
+handlers = ["http"]
+port = 80 
+
+[[services.ports]]
+handlers = ["tls", "http"]
+port = 443 
+
+[[services.http_checks]]
+interval = "10s"
+grace_period = "5s"
+method = "get"
+path = "/health"
+protocol = "http"
+timeout = "2s"
