@@ -2,22 +2,23 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install system dependencies
+# Install system dependencies required for compilation tasks
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy and install python library modules
+# Copy and freeze dependencies cleanly into the container core layer
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
-# Create the internal data directory explicitly so SQLite has write-access
+# Manually guarantee that the SQLite data folder path is writable on the container layer
 RUN mkdir -p /data
 
-# Bundle project files
+# Transfer all project source assets directly into our main execution context folder
 COPY . .
 
 EXPOSE 8080
 
-# Execute direct module call matching your main entry script structure
+# Clean module configuration invocation ensuring python paths match perfectly
 CMD ["python", "-m", "uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8080"]
