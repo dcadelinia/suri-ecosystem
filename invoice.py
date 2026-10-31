@@ -1,14 +1,14 @@
-import datetime 
+import datetime
 
 def generate_suri_receipt(account_id, email, tier, amount):
-"""Generates standard industrial ledger receipts for compliance documentation."""
-receipt_id = f"SURI-INV-{int(datetime.datetime.utcnow().timestamp())}"
-timestamp = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC") 
+    """Generates standard industrial ledger receipts for compliance documentation."""
+    receipt_id = f"SURI-INV-{int(datetime.datetime.utcnow().timestamp())}"
+    timestamp = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
 
-return f"""# SYSTEM RECEIPT STATEMENT: SuRI ECOSYSTEM NETWORKS
+    return f"""# SYSTEM RECEIPT STATEMENT: SuRI ECOSYSTEM NETWORKS
 **Transaction Reference:** {receipt_id}
 **Timestamp:** {timestamp}
-**Account Provisioning Status:** ACTIVE / RECONCILED 
+**Account Provisioning Status:** ACTIVE / RECONCILED
 
 ### Customer Node Context:
 
@@ -17,7 +17,9 @@ return f"""# SYSTEM RECEIPT STATEMENT: SuRI ECOSYSTEM NETWORKS
 
 ### Computational Service Allotments
 
-Infrastructure System FeatureDistribution IntervalNet Rate (USD)**SuRI Intelligent Ingestion Platform Layer ({tier.replace('_', ' ').upper()})**Monthly Recurring${amount:.2f}
+Infrastructure System Feature | Distribution Interval | Net Rate (USD)
+---|---|---
+SuRI Intelligent Ingestion Platform Layer ({tier.replace('_', ' ').upper()}) | Monthly Recurring | ${amount:.2f}
 
 ### Financial Compliance Audit Summary
 
@@ -26,5 +28,6 @@ Infrastructure System FeatureDistribution IntervalNet Rate (USD)**SuRI Intellige
 * **Applied Processing Surcharges:** 0.00%
 * **Total Certified Paid Amount:** ${amount:.2f}
 
-*Thank you for deploying autonomous Sustainable Remediation & Innovation systems. Your edge filtration data pipeline nodes are cleared for tracking operational usage.*
+*Thank you for deploying autonomous Sustainable Remediation & Innovation systems.
+Your edge filtration data pipeline nodes are cleared for tracking operational usage.*
 """
