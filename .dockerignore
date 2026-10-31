@@ -1,0 +1,28 @@
+# Ignore local python virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Ignore compiled python bytecode caches
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore local source control and platform state files
+.git/
+.github/
+.idea/
+.vscode/
+.fly/
+
+# Ignore local database states and lock layers
+*.db
+*.db-journal
+*.sqlite3
+
+# Ignore active configuration logs
+.env
+*
+.log
